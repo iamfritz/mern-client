@@ -1,18 +1,60 @@
 import React from "react";
 import { useState } from "react";
 import { Form, Button } from "react-bootstrap";
+import axios from "axios";
 
-const handleSubmit = (e) => {
-  // prevent the form from refreshing the whole page
-  e.preventDefault();
-  // make a popup alert showing the "submitted" text
-  alert("Submited");
-};
+let api_url = process.env.REACT_APP_API_URL;
+let api_key = process.env.REACT_APP_API_KEY;
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [age, setAge] = useState("");
+  const [position, setPosition] = useState("");
+  const [level, setLevel] = useState("");
   const [register, setRegister] = useState(false);
+
+  const handleSubmit = (e) => {
+    // prevent the form from refreshing the whole page
+    e.preventDefault();
+
+    let data = JSON.stringify({
+      email: email,
+      password: password,
+      name: name,
+      age: age,
+      position: position,
+      level: level,
+    });
+
+    // set configurations
+    const configuration = {
+      method: "post",
+      url: api_url + "user/register",
+      headers: {
+        "api-key": api_key,
+      },
+      data: data,
+    };
+
+    // make the API call
+    axios(configuration)
+      .then((result) => {
+        let data = result.data;
+        console.log(data);
+        if (data.success == true) {
+          setRegister(true);
+        } else {
+          alert("result.message");
+          alert(result.message);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        alert(error.response.data.message);
+      });
+  };  
 
   return (
     <div>
@@ -42,9 +84,53 @@ export default function Login() {
           />
         </Form.Group>
 
+        <Form.Group controlId="formBasicName">
+          <Form.Label>Name</Form.Label>
+          <Form.Control
+            type="text"
+            name="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Name"
+          />
+        </Form.Group>
+
+        <Form.Group controlId="formBasicAge">
+          <Form.Label>Age</Form.Label>
+          <Form.Control
+            type="numer"
+            name="age"
+            value={age}
+            onChange={(e) => setAge(e.target.value)}
+            placeholder="Age"
+          />
+        </Form.Group>
+
+        <Form.Group controlId="formBasicPosition">
+          <Form.Label>Position</Form.Label>
+          <Form.Control
+            type="text"
+            name="Position"
+            value={position}
+            onChange={(e) => setPosition(e.target.value)}
+            placeholder="Position"
+          />
+        </Form.Group>
+
+        <Form.Group controlId="formBasicLevel">
+          <Form.Label>Level</Form.Label>
+          <Form.Control
+            type="text"
+            name="Level"
+            value={level}
+            onChange={(e) => setLevel(e.target.value)}
+            placeholder="Level"
+          />
+        </Form.Group>
+
         {/* submit button */}
         <Button variant="primary" type="submit">
-          Login
+          Register
         </Button>
       </Form>
     </div>

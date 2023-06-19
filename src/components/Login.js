@@ -1,18 +1,54 @@
 import React from "react";
 import { useState } from "react";
 import { Form, Button } from "react-bootstrap";
+import axios from "axios";
 
-const handleSubmit = (e) => {
-  // prevent the form from refreshing the whole page
-  e.preventDefault();
-  // make a popup alert showing the "submitted" text
-  alert("Submited");
-};
+let api_url = process.env.REACT_APP_API_URL;
+let api_key = process.env.REACT_APP_API_KEY;
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [register, setRegister] = useState(false);
+  const [login, setLogin] = useState(false);
+
+  const handleSubmit = (e) => {
+    // prevent the form from refreshing the whole page
+    e.preventDefault();
+
+    let data = JSON.stringify({
+      email: email,
+      password: password
+    }); 
+
+    // set configurations
+    const configuration = {
+      method: "post",
+      url: api_url + "user/login",
+      headers: {
+        "api-key": api_key,
+      },
+      data: {
+        email,
+        password,
+      },
+    };
+
+    // make the API call
+    axios(configuration)
+      .then((result) => {
+        let data = result.data;
+        console.log(data);
+        if(data.success == true) {
+          setLogin(true);
+        } else {
+          alert(result.message);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        alert(error.response.data.message);
+      });
+  };  
 
   return (
     <div>
@@ -26,7 +62,7 @@ export default function Login() {
             name="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter email"
+            placeholder="Enter Email Address"
           />
         </Form.Group>
 
@@ -46,6 +82,13 @@ export default function Login() {
         <Button variant="primary" type="submit">
           Login
         </Button>
+
+        {/* display success message */}
+        {login ? (
+          <p className="text-success">You Are Logged in Successfully</p>
+        ) : (
+          <p className="text-danger">You Are Not Logged in</p>
+        )}
       </Form>
     </div>
   );
