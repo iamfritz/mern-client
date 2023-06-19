@@ -25,6 +25,7 @@ export default function Login() {
       method: "post",
       url: api_url + "user/login",
       headers: {
+        "Content-Type": "application/json",
         "api-key": api_key,
       },
       data: {

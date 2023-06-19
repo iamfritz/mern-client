@@ -33,7 +33,8 @@ export default function Login() {
       method: "post",
       url: api_url + "user/register",
       headers: {
-        "api-key": api_key,
+        'Content-Type': 'application/json', 
+        'api-key': api_key,
       },
       data: data,
     };
