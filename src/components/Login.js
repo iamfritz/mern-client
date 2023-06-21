@@ -2,7 +2,9 @@ import React from "react";
 import { useState } from "react";
 import { Form, Button } from "react-bootstrap";
 import axios from "axios";
+import Cookies from "universal-cookie";
 
+const cookies = new Cookies();
 let api_url = process.env.REACT_APP_API_URL;
 let api_key = process.env.REACT_APP_API_KEY;
 
@@ -41,6 +43,12 @@ export default function Login() {
         console.log(data);
         if(data.success == true) {
           setLogin(true);
+          // set the cookie
+          cookies.set("TOKEN", result.data.token, {
+            path: "/",
+          });
+          // redirect user to the auth page
+          window.location.href = "/demo/auth";
         } else {
           alert(result.message);
         }

@@ -8,6 +8,7 @@ const Record = (props) => (
   <tr>
     <td>{props.record.name}</td>
     <td>{props.record.age}</td>
+    <td>{props.record.email}</td>
     <td>{props.record.position}</td>
     <td>{props.record.level}</td>
     <td>
@@ -119,6 +120,7 @@ export default function RecordList() {
           <tr>
             <th>Name</th>
             <th>Age</th>
+            <th>Email</th>
             <th>Position</th>
             <th>Level</th>
             <th>Action</th>
