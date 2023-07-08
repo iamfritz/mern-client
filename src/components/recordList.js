@@ -49,7 +49,6 @@ export default function RecordList() {
             if (!response.ok) {
                 const message = '';//`An error occurred: ${response.statusText}`;
                 console.log(response);
-                window.alert(message);
                 return;
             }
 

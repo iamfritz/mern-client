@@ -13,7 +13,17 @@ export default function Login() {
   const [age, setAge] = useState("");
   const [position, setPosition] = useState("");
   const [level, setLevel] = useState("");
+
   const [register, setRegister] = useState(false);
+
+  const resetForm = () => {
+        setEmail("");
+        setPassword("");
+        setName("");
+        setAge("");
+        setPosition("");
+        setLevel("");    
+  };
 
   const handleSubmit = (e) => {
     // prevent the form from refreshing the whole page
@@ -44,11 +54,12 @@ export default function Login() {
       .then((result) => {
         let data = result.data;
         console.log(data);
-        if (data.success == true) {
+        if (data.status === 'success') {
           setRegister(true);
+          resetForm();
+          alert("Successfully Registered");
         } else {
           alert("result.message");
-          alert(result.message);
         }
       })
       .catch((error) => {
@@ -130,7 +141,7 @@ export default function Login() {
         </Form.Group>
 
         {/* submit button */}
-        <Button variant="primary" type="submit">
+        <Button variant="primary" className="mt-5" type="submit">
           Register
         </Button>
       </Form>
