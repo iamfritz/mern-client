@@ -15,6 +15,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
 
   const [login, setLogin] = useState(false);
+  const [error, setError] = useState(false);
   
   const resetForm = () => {
     setEmail("");
@@ -57,14 +58,15 @@ export default function Login() {
             path: "/",
           });
           // redirect user to the auth page
-          window.location.href = "/demo/auth";
+          window.location.href = "/";
         } else {
-          alert(result.message);
+          setError(result.message);
         }
       })
       .catch((error) => {
-        console.log(error);
-        alert(error.response.data.message);
+        //console.log('error');
+        console.log(error.response.data.message);
+        setError(error.response.data.message);
       });
   };  
 
@@ -83,64 +85,70 @@ export default function Login() {
                       Please enter your login and password!
                     </p>
                     <div className="mb-3">
-                      <Form>
-                        <Form.Group className="mb-3" controlId="formBasicEmail">
-                          <Form.Label className="text-center">
-                            Email address
-                          </Form.Label>
-                          <Form.Control
-                            type="email"
-                            name="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            placeholder="Enter Email Address"
-                          />
-                        </Form.Group>
+                      <Form.Group className="mb-3" controlId="formBasicEmail">
+                        <Form.Label className="text-center">
+                          Email address
+                        </Form.Label>
+                        <Form.Control
+                          type="email"
+                          name="email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          placeholder="Enter Email Address"
+                        />
+                      </Form.Group>
+                      <Form.Group
+                        className="mb-3"
+                        controlId="formBasicPassword"
+                      >
+                        <Form.Label>Password</Form.Label>
+                        <Form.Control
+                          type="password"
+                          name="password"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          placeholder="Password"
+                        />
+                      </Form.Group>
+                      <Form.Group
+                        className="mb-3"
+                        controlId="formBasicCheckbox"
+                      >
+                        <p className="small">
+                          <a className="text-primary" href="#!">
+                            Forgot password?
+                          </a>
+                        </p>
+                      </Form.Group>
 
-                        <Form.Group
-                          className="mb-3"
-                          controlId="formBasicPassword"
-                        >
-                          <Form.Label>Password</Form.Label>
-                          <Form.Control
-                            type="password"
-                            name="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            placeholder="Password"
-                          />
-                        </Form.Group>
-                        <Form.Group
-                          className="mb-3"
-                          controlId="formBasicCheckbox"
-                        >
-                          <p className="small">
-                            <a className="text-primary" href="#!">
-                              Forgot password?
-                            </a>
-                          </p>
-                        </Form.Group>
-                        <div className="d-grid">
-                          <Button variant="primary" type="submit">
-                            Login
-                          </Button>
-                        </div>
-                      </Form>
+                      <div className="d-grid">
+                        <Button variant="primary" type="submit">
+                          Login
+                        </Button>
+                      </div>
                       <div className="mt-3">
                         <p className="mb-0  text-center">
-                          Don't have an account? <a href="/register" className="text-primary fw-bold">Sign Up</a>
+                          Don't have an account?{" "}
+                          <a href="/register" className="text-primary fw-bold">
+                            Sign Up
+                          </a>
                         </p>
                       </div>
+                      
                       {/* display success message */}
                       {login ? (
                         <Alert variant="success" className="mt-3">
                           <p className="mb-0">You Are Logged in Successfully</p>
                         </Alert>
                       ) : (
-                        <Alert variant="warning" className="mt-3">
-                          <p className="mb-0">You Are Not Logged in</p>
-                        </Alert>
+                        ""
                       )}
+                      
+                      {error ? (
+                        <Alert variant="warning" className="mt-3">
+                          <p className="mb-0">{ error }</p>
+                        </Alert>
+                      ) : ("")}
                     </div>
                   </div>
                 </Card.Body>

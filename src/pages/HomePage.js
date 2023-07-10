@@ -1,5 +1,5 @@
-function HomePage() {
-  return <div>Home Page</div>;
-}
+import Hero from "../components/hero";
 
-export default HomePage;
+export default function HomePage(props) {
+  return <Hero />;
+}

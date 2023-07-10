@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import {
+  Container,
+  Card,
+  Col,
+  Row,
+  Alert,
+} from "react-bootstrap";
 
 var api_url = process.env.REACT_APP_API_URL;
 var api_key = process.env.REACT_APP_API_KEY;
@@ -113,20 +120,29 @@ export default function RecordList() {
   // This following section will display the table with the records of individuals.
   return (
     <div>
-      <h3>Record List</h3>
-      <table className="table table-striped" style={{ marginTop: 20 }}>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Age</th>
-            <th>Email</th>
-            <th>Position</th>
-            <th>Level</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>{recordList()}</tbody>
-      </table>
+      <Container>
+        <div className="border border-3 border-primary"></div>
+        <Card className="shadow">
+          <Card.Body>
+            <div className="mb-3 mt-md-4">
+              <h2 className="fw-bold mb-2 text-uppercase ">Record List</h2>
+              <table className="table table-striped" style={{ marginTop: 20 }}>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Email</th>
+                    <th>Position</th>
+                    <th>Level</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>{recordList()}</tbody>
+              </table>
+            </div>
+          </Card.Body>
+        </Card>
+      </Container>
     </div>
   );
 }

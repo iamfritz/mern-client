@@ -4,7 +4,7 @@ import React from "react";
 import Cookies from "universal-cookie";
 
 // We import all the components we need in our app
-import Routers from "./routes/routers";
+import Routers from "./routes/Routers";
 import Header from "./components/header";
 import Footer from "./components/footer";
 

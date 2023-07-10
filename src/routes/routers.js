@@ -10,16 +10,14 @@ import {
 import PrivateRoute from "./PrivateRoute";
 
 //pages
-import RecordList from "../components/recordList";
+import PostList from "../components/recordList";
 import Edit from "../components/edit";
 import Create from "../components/create";
-import Account from "../pages/Account";
-import FreeComponent from "../pages/FreeComponent";
-import AuthComponent from "../pages/AuthComponent";
+import Home from "../pages/HomePage";
 
-import HomePage from "../pages/FreeComponent"
+import Account from "../pages/Account";
 import Login from "../forms/Login"
-import Register from "../forms/Login"
+import Register from "../forms/Register";
 
 function PrivateRouter({ path, children, redirectTo }) {
   let isAuthenticated = false;
@@ -36,18 +34,16 @@ function Routers() {
     return (
       <div>
         <Routes>
-          <Route exact path="/" element={<RecordList />} />
+          <Route exact path="/" element={<Home />} /> 
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
 
-          <Route path="/demo/free" element={<FreeComponent />} />          
-          <Route path="/login" element={<Login />} />          
-  
-          <Route path='/' element={<PrivateRoute/>}>
+            <Route exact path="/post" element={<PostList />} />
             <Route path="/edit/:id" element={<Edit />} />
-            <Route path="/account" element={<Account />} />
             <Route path="/create" element={<Create />} />
-            <Route path='/demo/auth' element={<AuthComponent/>}/>
+          <Route path="/" element={<PrivateRoute />}>
+            <Route path="/account" element={<Account />} />
           </Route>
-
         </Routes>
       </div>
     );
