@@ -1,10 +1,24 @@
 import React from "react";
 
-// We import NavLink to utilize the react router.
 import { NavLink } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.css";
+import { Button } from "react-bootstrap";
+import Cookies from "universal-cookie";
 
-// Here, we display our Navbar
+const cookies = new Cookies();
+
+// logout
+const logout = () => {
+  // destroy the cookie
+  cookies.remove("TOKEN", { path: "/" });
+  // redirect user to the landing page
+  window.location.href = "/";
+};
+
 export default function Navbar() {
+  
+  const token = cookies.get("TOKEN");
+  
   return (
     <div>
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -52,9 +66,15 @@ export default function Navbar() {
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink className="nav-link" to="/login">
-                Login
-              </NavLink>
+              {token ? (
+                <Button type="submit" variant="danger" onClick={() => logout()}>
+                  Logout
+                </Button>
+              ) : (
+                <NavLink className="nav-link" to="/login">
+                  Login
+                </NavLink>
+              )}
             </li>
           </ul>
         </div>

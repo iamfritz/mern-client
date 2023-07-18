@@ -19,8 +19,19 @@ import Account from "../pages/Account";
 import Login from "../forms/Login"
 import Register from "../forms/Register";
 
+import Cookies from "universal-cookie";
+const cookies = new Cookies();
+
 function PrivateRouter({ path, children, redirectTo }) {
   let isAuthenticated = false;
+
+  // get cookie from browser if logged in
+  const token = cookies.get("TOKEN");
+
+  // returns route if there is a valid token set in the cookie
+  if (token) {
+    isAuthenticated = true;
+  }
   return (
     <Route
       path={path}
@@ -38,10 +49,10 @@ function Routers() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
+          <Route path="/" element={<PrivateRoute />}>
             <Route exact path="/post" element={<PostList />} />
             <Route path="/edit/:id" element={<Edit />} />
             <Route path="/create" element={<Create />} />
-          <Route path="/" element={<PrivateRoute />}>
             <Route path="/account" element={<Account />} />
           </Route>
         </Routes>
