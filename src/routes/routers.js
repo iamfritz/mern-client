@@ -10,7 +10,10 @@ import {
 import PrivateRoute from "./PrivateRoute";
 
 //pages
-import PostList from "../components/recordList";
+import PostList from "../pages/post/index.js";
+import PostEdit from "../pages/post/edit.js";
+import PostNew from "../pages/post/add.js";
+import recordList from "../components/recordList";
 import Edit from "../components/edit";
 import Create from "../components/create";
 import Home from "../pages/HomePage";
@@ -45,14 +48,15 @@ function Routers() {
     return (
       <div>
         <Routes>
-          <Route exact path="/" element={<Home />} /> 
+          <Route exact path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
+          <Route exact path="/posts" element={<PostList />} />
+          <Route path="/posts/edit/:id" element={<PostEdit />} />
+          <Route path="/posts/new" element={<PostNew />} />
           <Route path="/" element={<PrivateRoute />}>
-            <Route exact path="/post" element={<PostList />} />
-            <Route path="/edit/:id" element={<Edit />} />
-            <Route path="/create" element={<Create />} />
+            <Route exact path="/user" element={<recordList />} />
             <Route path="/account" element={<Account />} />
           </Route>
         </Routes>

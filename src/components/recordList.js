@@ -43,7 +43,7 @@ export default function RecordList() {
 
         try {
             //const response = await fetch(`${process.env.API_URL}/record/all`);
-            let url = `${api_url}user/all`;
+            let url = `${api_url}users`;
             const response = await fetch(url, {
               method: "GET",
               Accept: "application/json",
@@ -119,30 +119,33 @@ export default function RecordList() {
 
   // This following section will display the table with the records of individuals.
   return (
-    <div>
-      <Container>
-        <div className="border border-3 border-primary"></div>
-        <Card className="shadow">
-          <Card.Body>
-            <div className="mb-3 mt-md-4">
-              <h2 className="fw-bold mb-2 text-uppercase ">Record List</h2>
-              <table className="table table-striped" style={{ marginTop: 20 }}>
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Age</th>
-                    <th>Email</th>
-                    <th>Position</th>
-                    <th>Level</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>{recordList()}</tbody>
-              </table>
-            </div>
-          </Card.Body>
-        </Card>
-      </Container>
+    <div className="container">
+      <h2 className="fw-bold mb-2 text-uppercase ">Record List</h2>
+      <table className="min-w-full text-left text-sm font-light">
+        <thead className="border-b font-medium dark:border-neutral-500">
+          <tr>
+            <th scope="col" className="px-6 py-4">
+              Name
+            </th>
+            <th scope="col" className="px-6 py-4">
+              Age
+            </th>
+            <th scope="col" className="px-6 py-4">
+              Email
+            </th>
+            <th scope="col" className="px-6 py-4">
+              Position
+            </th>
+            <th scope="col" className="px-6 py-4">
+              Level
+            </th>
+            <th scope="col" className="px-6 py-4">
+              Action
+            </th>
+          </tr>
+        </thead>
+        <tbody>{recordList()}</tbody>
+      </table>
     </div>
   );
 }

@@ -5,8 +5,8 @@ import Cookies from "universal-cookie";
 
 // We import all the components we need in our app
 import Routers from "./routes/Routers";
-import Header from "./components/header";
-import Footer from "./components/footer";
+import Header from "./layout/header";
+import Footer from "./layout/footer";
 
 import Demo from "./components/demo";
 
