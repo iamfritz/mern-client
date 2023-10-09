@@ -100,7 +100,11 @@ const PostList = () => {
           {posts.map((post) => (
             <tr>
               <td>{post.title}</td>
-              <td>{post.image && `${baseURL}/${post.image}`}</td>
+              <td>
+                {post.image && (
+                  <img src={post.image} title={post.title} width="80" />
+                )}
+              </td>
               <td>
                 {post.category.map((category) => (
                   <span class="bg-gray-100 text-gray-800 text-xs font-small mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">
