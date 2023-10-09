@@ -4,21 +4,27 @@ import { useParams } from "react-router-dom";
 
 import postService from "../../services/PostService";
 import PageLoader from "../../components/PageLoader";
+import AlertError from "../../components/AlertError";
+import AlertSuccess from "../../components/AlertSuccess";
 
 function AddPost() {
   const [isLoading, setIsLoading] = useState(true);
+  const [messageSuccess, setMessageSuccess] = useState(false);
+  const [messageError, setMessageError] = useState(false);
+
   const { id } = useParams(); // Get the post ID from the URL
   
   const [postId, setPostId] = useState(id); // Store the post ID
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    category: "",
-    image: "",
-  });
+  const formDefault = {
+            title: "",
+            description: "",
+            category: "",
+            image: "",
+          };
+  const [formData, setFormData] = useState(formDefault);
 
   useEffect(() => {
-    setIsLoading(true);
+    setIsLoading(false);
     // Fetch all posts when the component mounts
     //get category
     /* postService
@@ -52,16 +58,23 @@ function AddPost() {
       .then((response) => {
         console.log(response.data);
         setIsLoading(false);
+        setFormData(formDefault);
+        setMessageSuccess("Successfully added new Record");
       })
       .catch((error) => {
-        console.error("Error fetching posts:", error);
         setIsLoading(false);
+        console.error("Error fetching posts:");
+        console.log(error.response.data);
+        setMessageError(error.response.data.message);
       });
   };
 
   return (
     <div class="container mx-auto">
       {isLoading ? <PageLoader /> : ""}
+      {messageSuccess ? <AlertSuccess text={messageSuccess} /> : ""}
+      {messageError ? <AlertError text={messageError} /> : ""}
+
       <h1>Posts</h1>
       <form onSubmit={handleSubmit}>
         <div class="relative z-0 w-full mb-6 group">

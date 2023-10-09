@@ -68,3 +68,25 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
+
+##### User Page
+1. [ ] Registration
+1. [ ] Login
+1. [ ] User Page
+
+##### Post Page
+1. [ ] Post List
+1. [ ] Create Post - findorcreate category field by title
+# FIELDS    
+- title
+- description
+- category - category name separate by comma (findorcreate category)
+- image
+- meta - custom field
+1. [ ] Edit Post
+1. [ ] View Post
+1. [ ] Delete Post
+
+##### Todo Page

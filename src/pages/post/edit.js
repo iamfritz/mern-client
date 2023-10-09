@@ -3,11 +3,15 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from "react-router-dom";
 
 import postService from "../../services/PostService";
-import PageLoader from "../../components/PageLoader";
+import Loading from "../../components/PageLoader";
+import AlertMessage from "../../components/Alert";
 
 function EditPost() {
   const [post, setPost] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [message, setMessage] = useState(false);
+  const [messageError, setMessageError] = useState(false);
+ 
   const { id } = useParams(); // Get the post ID from the URL
   
   const [postId, setPostId] = useState(id); // Store the post ID
@@ -27,7 +31,7 @@ function EditPost() {
         //console.log(response.data);
         setPost(response.data);
         setFormData(response.data);
-        setIsLoading(false);
+        setIsLoading(false);        
       })
       .catch((error) => {
         console.error("Error fetching posts:", error);
@@ -52,16 +56,21 @@ function EditPost() {
       .then((response) => {
         console.log(response.data);
         setIsLoading(false);
+        setMessageError(false);
+        setMessage("Post is successfully updated.");
       })
       .catch((error) => {
-        console.error("Error fetching posts:", error);
+        console.error("Error updating posts:", error);
+        setMessage("Error in updating post.");
+        setMessageError(true);
         setIsLoading(false);
       });
   };
 
   return (
     <div class="container mx-auto">
-      {isLoading ? <PageLoader /> : ""}
+      {isLoading && <Loading />}
+      {message && <AlertMessage status={messageError} text={message} />}
       <h1>Posts</h1>
       <form onSubmit={handleSubmit}>
         <div class="relative z-0 w-full mb-6 group">

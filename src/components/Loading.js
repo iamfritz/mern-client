@@ -1,17 +1,14 @@
-import React, { useEffect, useState } from "react";
+// Loading.js
+import React from "react";
 import "../assets/css/Loading.css"; // Import your CSS styles for the loading component
 import { useLoading } from "./LoadingContext";
 
-export default function PageLoader() {
-  const [isLoading, setIsLoading] = useState(false);
+const Loading = () => {
+  const { isLoading } = useLoading();
 
-  const startLoading = () => {
-    setIsLoading(true);
-  };
-
-  const stopLoading = () => {
-    setIsLoading(false);
-  };
+  if (!isLoading) {
+    return null; // Hide the loading component if isLoading is false
+  } 
 
   return (
     <div class="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden bg-gray-700 opacity-75 flex flex-col items-center justify-center">
@@ -22,4 +19,6 @@ export default function PageLoader() {
       </p>
     </div>
   );
-}
+};
+
+export default Loading;

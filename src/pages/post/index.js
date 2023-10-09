@@ -3,49 +3,78 @@ import { Link } from "react-router-dom";
 
 import postService from "../../services/PostService";
 import PageLoader from "../../components/PageLoader";
+import AlertMessage from "../../components/Alert";
 
-function PostList() {
+import PageLoading from "../../components/Loading";
+import { useLoading } from "../../components/LoadingContext";
+
+const baseURL = process.env.REACT_APP_API_URL; 
+
+const PostList = () => {
   const [posts, setPosts] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
 
+  const [message, setMessage] = useState(false);
+  const [messageError, setMessageError] = useState(false);
+
+  const { isLoading, setIsLoading, startLoading, stopLoading } = useLoading();
+
+  /* useEffect(() => {
+    startLoading();
+    setTimeout(() => {
+      stopLoading();
+      //setIsLoading(false);
+    }, 2000);
+  }, [setIsLoading]); */
 
   useEffect(() => {
-    setIsLoading(true);
+    startLoading();
     // Fetch all posts when the component mounts
     postService
       .getPosts()
       .then((response) => {
-        setPosts(response.data); 
-        setIsLoading(false);
+        setPosts(response.data);
+        stopLoading();   
       })
       .catch((error) => {
         console.error("Error fetching posts:", error);
-        setIsLoading(false);
+        setMessageError(true);
+        setMessage("Error fetching posts.");
+        stopLoading();
       });
   }, []);
 
   const handleDelete = (postId) => {
     if (!window.confirm("Are you sure you want to delete the record?")) {
       return false;
-    }    
+    }
 
-    setIsLoading(true);
+    startLoading();
     // Call the deletePost function from the post service
-    postService.deletePost(postId)
+    postService
+      .deletePost(postId)
       .then(() => {
         // Remove the deleted post from the state
-        setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId));
-        setIsLoading(false);     
+        setPosts((prevPosts) =>
+          prevPosts.filter((post) => post._id !== postId)
+        );
+        stopLoading();
+        setMessageError(false);
+        setMessage("Post is successfully deleted.");
       })
-      .catch((error) => console.error('Error deleting post:', error));
+      .catch((error) => {
+        stopLoading();
+        console.error("Error deleting post:");
+        console.log(error.response.data);
+        setMessageError(true);
+        setMessage(error.response.data.message);
+      });    
   };
-
-  if (isLoading) {
-    return <PageLoader />;
-  }
 
   return (
     <div class="container mx-auto">
+      {isLoading && <PageLoading />}
+      {message && <AlertMessage status={messageError} text={message} />}
+
       <h1>Posts</h1>
       <table class="min-w-full text-left text-sm font-light">
         <thead class="border-b font-medium dark:border-neutral-500">
@@ -60,12 +89,9 @@ function PostList() {
               Category
             </th>
             <th scope="col" className="px-6 py-4">
-              Position
-            </th>
-            <th scope="col" className="px-6 py-4">
               Created
             </th>
-            <th scope="col" className="px-6 py-4">
+            <th scope="col" className="px-6 py-4" width="120">
               Action
             </th>
           </tr>
@@ -74,7 +100,7 @@ function PostList() {
           {posts.map((post) => (
             <tr>
               <td>{post.title}</td>
-              <td>{post.image}</td>
+              <td>{post.image && `${baseURL}/${post.image}`}</td>
               <td>
                 {post.category.map((category) => (
                   <span class="bg-gray-100 text-gray-800 text-xs font-small mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">
@@ -82,7 +108,6 @@ function PostList() {
                   </span>
                 ))}
               </td>
-              <td>{post.image}</td>
               <td>{post.createdAt}</td>
               <td>
                 <Link
@@ -105,6 +130,6 @@ function PostList() {
       </table>
     </div>
   );
-}
+};
 
 export default PostList;
