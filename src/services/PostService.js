@@ -1,68 +1,20 @@
-import axios from "axios";
+// PostService.js
+import apiService from "./BaseService";
 
-const API_BASE_URL = process.env.REACT_APP_API_URL; 
+const resource = "posts"; // Replace with your specific resource name
 
-// Create an Axios instance with a base URL
-const api = axios.create({
-  baseURL: `${API_BASE_URL}posts`, // Assuming your posts API endpoint is at /posts
-});
-
-// Define your post-related service methods
-
-export const getPosts = async () => {
-  try {
-    const response = await api.get("/");
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const getPostById = async (postId) => {
-  try {
-    const response = await api.get(`/${postId}`);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-// Function to create a new post
-export const createPost = async (postData) => {
-  try {
-    const response = await api.post("/", postData);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-// Function to update a post by ID
-export const updatePost = async (postId, postData) => {
-  try {
-    const response = await api.put(`/${postId}`, postData);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-// Function to delete a post by ID
-export const deletePost = async (postId) => {
-  try {
-    const response = await api.delete(`/${postId}`);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
+export const create = (data) => apiService.create(resource, data);
+export const getAll = () => apiService.getAll(resource);
+export const getPost = (id) => apiService.get(resource, id);
+export const update = (id, data) => apiService.update(resource, id, data);
+export const deleteItem = (id) => apiService.remove(resource, id);
 
 const postService = {
-  getPosts,
-  getPostById,
-  createPost,
-  updatePost,
-  deletePost,
+  getAll,
+  getPost,
+  create,
+  update,
+  deleteItem,
 };
 
 export default postService;

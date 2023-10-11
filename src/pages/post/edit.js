@@ -6,12 +6,16 @@ import postService from "../../services/PostService";
 import Loading from "../../components/PageLoader";
 import AlertMessage from "../../components/Alert";
 
+import PageLoading from "../../components/Loading";
+import { useLoading } from "../../components/LoadingContext";
+
 function EditPost() {
   const [post, setPost] = useState({});
-  const [isLoading, setIsLoading] = useState(true);
+  
   const [message, setMessage] = useState(false);
   const [messageError, setMessageError] = useState(false);
- 
+  const { isLoading, setIsLoading, startLoading, stopLoading } = useLoading();
+
   const { id } = useParams(); // Get the post ID from the URL
   
   const [postId, setPostId] = useState(id); // Store the post ID
@@ -23,19 +27,24 @@ function EditPost() {
   });
 
   useEffect(() => {
-    setIsLoading(true);
+    startLoading();
     // Fetch all posts when the component mounts
     postService
-      .getPostById(postId)
-      .then((response) => {
-        //console.log(response.data);
-        setPost(response.data);
-        setFormData(response.data);
-        setIsLoading(false);        
+      .getPost(postId)
+      .then((res) => {
+        let response = res.data;
+        let postItem = response.data;
+        setPost(postItem);
+        setFormData(postItem);
       })
       .catch((error) => {
         console.error("Error fetching posts:", error);
-        setIsLoading(false);
+
+        setMessageError(true);
+        setMessage("Error fetching posts.");
+      })
+      .finally(() => {
+        stopLoading();
       });
   }, [postId]);
 
@@ -50,20 +59,25 @@ function EditPost() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setIsLoading(true);
+    startLoading();
     postService
-      .updatePost(postId, formData)
+      .update(postId, formData)
       .then((response) => {
         console.log(response.data);
-        setIsLoading(false);
+
         setMessageError(false);
         setMessage("Post is successfully updated.");
       })
       .catch((error) => {
-        console.error("Error updating posts:", error);
-        setMessage("Error in updating post.");
+        let response = error.response;
+        console.error("Error updating posts:");
+        console.error(error);
+
         setMessageError(true);
-        setIsLoading(false);
+        setMessage(response.data.message);
+      })
+      .finally(() => {
+        stopLoading();
       });
   };
 

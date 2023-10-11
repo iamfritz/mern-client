@@ -2,22 +2,19 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import postService from "../../services/PostService";
-import PageLoader from "../../components/PageLoader";
+//import PageLoader from "../../components/PageLoader";
 import AlertMessage from "../../components/Alert";
 
 import PageLoading from "../../components/Loading";
 import { useLoading } from "../../components/LoadingContext";
-
-const baseURL = process.env.REACT_APP_API_URL; 
 
 const PostList = () => {
   const [posts, setPosts] = useState([]);
 
   const [message, setMessage] = useState(false);
   const [messageError, setMessageError] = useState(false);
-
   const { isLoading, setIsLoading, startLoading, stopLoading } = useLoading();
-
+  
   /* useEffect(() => {
     startLoading();
     setTimeout(() => {
@@ -30,18 +27,22 @@ const PostList = () => {
     startLoading();
     // Fetch all posts when the component mounts
     postService
-      .getPosts()
-      .then((response) => {
-        setPosts(response.data);
-        stopLoading();   
+      .getAll()
+      .then((res) => {
+        let response = res.data;
+        let postItem = response.data;
+        setPosts(postItem);
       })
       .catch((error) => {
         console.error("Error fetching posts:", error);
+
         setMessageError(true);
-        setMessage("Error fetching posts.");
+        setMessage("Error fetching posts.");        
+      })
+      .finally(() => {
         stopLoading();
       });
-  }, []);
+  }, posts);
 
   const handleDelete = (postId) => {
     if (!window.confirm("Are you sure you want to delete the record?")) {
@@ -51,22 +52,25 @@ const PostList = () => {
     startLoading();
     // Call the deletePost function from the post service
     postService
-      .deletePost(postId)
+      .deleteItem(postId)
       .then(() => {
         // Remove the deleted post from the state
         setPosts((prevPosts) =>
           prevPosts.filter((post) => post._id !== postId)
         );
-        stopLoading();
+        
         setMessageError(false);
         setMessage("Post is successfully deleted.");
       })
       .catch((error) => {
-        stopLoading();
         console.error("Error deleting post:");
-        console.log(error.response.data);
+        console.log(error);
+
         setMessageError(true);
         setMessage(error.response.data.message);
+      })
+      .finally(() => {
+        stopLoading();
       });    
   };
 
