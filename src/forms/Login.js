@@ -34,7 +34,7 @@ export default function Login() {
     // set configurations
     const configuration = {
       method: "post",
-      url: api_url + "user/login",
+      url: api_url + "/auth/login",
       headers: {
         "Content-Type": "application/json",
         "api-key": api_key,

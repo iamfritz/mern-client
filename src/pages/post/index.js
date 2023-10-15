@@ -45,33 +45,33 @@ const PostList = () => {
   }, posts);
 
   const handleDelete = (postId) => {
-    if (!window.confirm("Are you sure you want to delete the record?")) {
-      return false;
+    
+    const confirmDelete = window.confirm('Are you sure you want to delete this item?');
+    if (confirmDelete) {
+      startLoading();
+      // Call the deletePost function from the post service
+      postService
+        .deleteItem(postId)
+        .then(() => {
+          // Remove the deleted post from the state
+          setPosts((prevPosts) =>
+            prevPosts.filter((post) => post._id !== postId)
+          );
+          
+          setMessageError(false);
+          setMessage("Post is successfully deleted.");
+        })
+        .catch((error) => {
+          console.error("Error deleting post:");
+          console.log(error);
+  
+          setMessageError(true);
+          setMessage(error.response.data.message);
+        })
+        .finally(() => {
+          stopLoading();
+        });    
     }
-
-    startLoading();
-    // Call the deletePost function from the post service
-    postService
-      .deleteItem(postId)
-      .then(() => {
-        // Remove the deleted post from the state
-        setPosts((prevPosts) =>
-          prevPosts.filter((post) => post._id !== postId)
-        );
-        
-        setMessageError(false);
-        setMessage("Post is successfully deleted.");
-      })
-      .catch((error) => {
-        console.error("Error deleting post:");
-        console.log(error);
-
-        setMessageError(true);
-        setMessage(error.response.data.message);
-      })
-      .finally(() => {
-        stopLoading();
-      });    
   };
 
   return (
