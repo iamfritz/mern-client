@@ -22,8 +22,8 @@ const PostList = () => {
       //setIsLoading(false);
     }, 2000);
   }, [setIsLoading]); */
-
-  useEffect(() => {
+  
+  const fetchPosts = () => {
     startLoading();
     // Fetch all posts when the component mounts
     postService
@@ -37,27 +37,25 @@ const PostList = () => {
         console.error("Error fetching posts:", error);
 
         setMessageError(true);
-        setMessage("Error fetching posts.");        
+        setMessage("Error fetching posts.");
       })
       .finally(() => {
         stopLoading();
       });
-  }, posts);
+  };
 
   const handleDelete = (postId) => {
     
     const confirmDelete = window.confirm('Are you sure you want to delete this item?');
-    if (confirmDelete) {
+    if (confirmDelete) {      
       startLoading();
       // Call the deletePost function from the post service
       postService
         .deleteItem(postId)
         .then(() => {
           // Remove the deleted post from the state
-          setPosts((prevPosts) =>
-            prevPosts.filter((post) => post._id !== postId)
-          );
-          
+          setPosts(posts.filter((post) => post._id !== postId));
+
           setMessageError(false);
           setMessage("Post is successfully deleted.");
         })
@@ -70,9 +68,15 @@ const PostList = () => {
         })
         .finally(() => {
           stopLoading();
-        });    
+        });   
+       
     }
   };
+
+  useEffect(() => {
+    // Fetch posts when the component mounts
+    fetchPosts();
+  }, []);
 
   return (
     <div class="container mx-auto">
