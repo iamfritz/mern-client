@@ -11,7 +11,7 @@ export default function AlertError(props) {
   return (
     <div
       id="alert-Error"
-      class="flex items-center p-4 mb-4 text-red-800 border-t-4 border-red-300 bg-red-50 dark:text-red-400 dark:bg-gray-800 dark:border-red-800"
+      class="flex items-center p-3 mb-4 text-red-800 border-t-4 border-red-300 bg-red-50 dark:text-red-400 dark:bg-gray-800 dark:border-red-800"
       role="alert"
     >
       <svg
